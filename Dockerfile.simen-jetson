@@ -5,7 +5,7 @@ ENV TZ=Europe/Oslo
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # Install packages
-RUN apt-get update && apt-get install -y wget git vim python3 python3-pip
+RUN apt-get update && apt-get install -y wget git vim python3 python3-pip cargo
 
 # Add user
 RUN useradd -G video -ms /bin/bash fooocuser
@@ -15,7 +15,7 @@ USER fooocuser
 WORKDIR /home/fooocuser/
 ENV PATH="$PATH:/home/fooocuser/.local/bin"
 
-ENV REQS_FILE /home/comfy/requirements_xavier.txt
+ENV REQS_FILE /home/fooocuser/requirements_xavier.txt
 RUN pip3 install -U \
   requests \
   typing_extensions>=4.5 \
