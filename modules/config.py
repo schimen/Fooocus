@@ -1,3 +1,4 @@
+from __future__ import annotations
 import os
 import json
 import math
@@ -233,7 +234,7 @@ def get_config_item_or_set_default(key, default_value, validator, disable_empty_
         return default_value
 
 
-def init_temp_path(path: str | None, default_path: str) -> str:
+def init_temp_path(path, default_path: str) -> str:
     if args_manager.args.temp_path:
         path = args_manager.args.temp_path
 
@@ -959,15 +960,14 @@ def downloading_safety_checker_model():
 
 
 def download_sam_model(sam_model: str) -> str:
-    match sam_model:
-        case 'vit_b':
-            return downloading_sam_vit_b()
-        case 'vit_l':
-            return downloading_sam_vit_l()
-        case 'vit_h':
-            return downloading_sam_vit_h()
-        case _:
-            raise ValueError(f"sam model {sam_model} does not exist.")
+    if sam_model == 'vit_b':
+        return downloading_sam_vit_b()
+    elif sam_model == 'vit_l':
+        return downloading_sam_vit_l()
+    elif sam_model == 'vit_h':
+        return downloading_sam_vit_h()
+    else:
+        raise ValueError(f"sam model {sam_model} does not exist.")
 
 
 def downloading_sam_vit_b():

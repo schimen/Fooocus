@@ -1,3 +1,4 @@
+from __future__ import annotations
 import json
 import re
 from abc import ABC, abstractmethod
@@ -595,13 +596,12 @@ class FooocusMetadataParser(MetadataParser):
 
 
 def get_metadata_parser(metadata_scheme: MetadataScheme) -> MetadataParser:
-    match metadata_scheme:
-        case MetadataScheme.FOOOCUS:
-            return FooocusMetadataParser()
-        case MetadataScheme.A1111:
-            return A1111MetadataParser()
-        case _:
-            raise NotImplementedError
+    if metadata_scheme == MetadataScheme.FOOOCUS:
+        return FooocusMetadataParser()
+    elif metadata_scheme == MetadataScheme.A1111:
+        return A1111MetadataParser()
+    else:
+        raise NotImplementedError
 
 
 def read_info_from_image(file) -> tuple[str | None, MetadataScheme | None]:

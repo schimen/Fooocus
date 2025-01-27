@@ -1,3 +1,4 @@
+from __future__ import annotations
 from enum import IntEnum, Enum
 
 disabled = 'Disabled'
@@ -51,7 +52,9 @@ SAMPLER_EXTRA = {
     "uni_pc_bh2": ""
 }
 
-SAMPLERS = KSAMPLER | SAMPLER_EXTRA
+SAMPLERS = KSAMPLER.copy()
+SAMPLERS.update(SAMPLER_EXTRA)
+
 
 KSAMPLER_NAMES = list(KSAMPLER.keys())
 
@@ -172,7 +175,7 @@ class Performance(Enum):
         return list(map(lambda c: c.value, cls))
 
     @classmethod
-    def by_steps(cls, steps: int | str):
+    def by_steps(cls, steps):
         return cls[Steps(int(steps)).name]
 
     @classmethod
@@ -181,11 +184,11 @@ class Performance(Enum):
             x = x.value
         return x in [cls.EXTREME_SPEED.value, cls.LIGHTNING.value, cls.HYPER_SD.value]
 
-    def steps(self) -> int | None:
+    def steps(self):
         return Steps[self.name].value if self.name in Steps.__members__ else None
 
-    def steps_uov(self) -> int | None:
+    def steps_uov(self):
         return StepsUOV[self.name].value if self.name in StepsUOV.__members__ else None
 
-    def lora_filename(self) -> str | None:
+    def lora_filename(self):
         return PerformanceLoRA[self.name].value if self.name in PerformanceLoRA.__members__ else None
