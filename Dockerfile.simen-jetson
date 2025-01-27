@@ -1,0 +1,46 @@
+FROM l4t-pytorch:r35.6.0
+
+# Fix timezone issue
+ENV TZ=Europe/Oslo
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+# Install packages
+RUN apt-get update && apt-get install -y wget git vim python3 python3-pip
+
+# Add user
+RUN useradd -G video -ms /bin/bash fooocuser
+RUN usermod -aG video fooocuser
+RUN usermod -aG render fooocuser
+USER fooocuser
+WORKDIR /home/fooocuser/
+ENV PATH="$PATH:/home/fooocuser/.local/bin"
+
+ENV REQS_FILE /home/comfy/requirements_xavier.txt
+RUN pip3 install -U \
+  requests \
+  typing_extensions>=4.5 \
+  torchsde \
+  einops \
+  transformers \
+  safetensors \
+  accelerate \
+  pyyaml \
+  pillow \
+  scipy==1.8 \
+  tqdm \
+  psutil \
+  pytorch_lightning \
+  omegaconf \
+  gradio==3.48.0 \
+  pygit2 \
+  opencv-contrib-python-headless \
+  httpx \
+  onnxruntime \
+  timm==1.0.7 \
+  tokenizers \
+  packaging \
+  rembg \
+  groundingdino-py \
+  segment_anything
+RUN pip freeze > $REQS_FILE 
+
